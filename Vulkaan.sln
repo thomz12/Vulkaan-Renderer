@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28010.2003
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vulkaan", "Vulkaan\Vulkaan.csproj", "{0B329581-B2A3-4E10-B195-80E2E2019B9E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example", "Example\Example.csproj", "{D4A5A0B0-619D-40E1-8920-B98D89FA482E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{0B329581-B2A3-4E10-B195-80E2E2019B9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B329581-B2A3-4E10-B195-80E2E2019B9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0B329581-B2A3-4E10-B195-80E2E2019B9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4A5A0B0-619D-40E1-8920-B98D89FA482E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4A5A0B0-619D-40E1-8920-B98D89FA482E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4A5A0B0-619D-40E1-8920-B98D89FA482E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4A5A0B0-619D-40E1-8920-B98D89FA482E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
