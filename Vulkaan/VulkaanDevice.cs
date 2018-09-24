@@ -100,17 +100,26 @@ namespace Vulkaan
                     pos1 = pos1.Transform(transformation);
                     pos2 = pos2.Transform(transformation);
 
-                    _drawer.DrawLine(
-                        new Vector2((pos0.X + 1.0f) / 2.0f, (pos0.Y + 1.0f) / 2.0f),
-                        new Vector2((pos1.X + 1.0f) / 2.0f, (pos1.Y + 1.0f) / 2.0f));
+                    // Perspective division.
+                    pos0 /= -pos0.W;
+                    pos1 /= -pos1.W;
+                    pos2 /= -pos2.W;
+
+                    Vector3 triangle0 = new Vector3((pos0.X + 1.0f) / 2.0f, (pos0.Y + 1.0f) / 2.0f, pos0.Z);
+                    Vector3 triangle1 = new Vector3((pos1.X + 1.0f) / 2.0f, (pos1.Y + 1.0f) / 2.0f, pos1.Z);
+                    Vector3 triangle2 = new Vector3((pos2.X + 1.0f) / 2.0f, (pos2.Y + 1.0f) / 2.0f, pos2.Z);
 
                     _drawer.DrawLine(
-                        new Vector2((pos1.X + 1.0f) / 2.0f, (pos1.Y + 1.0f) / 2.0f),
-                        new Vector2((pos2.X + 1.0f) / 2.0f, (pos2.Y + 1.0f) / 2.0f));
+                        new Vector2(triangle0.X, triangle0.Y),
+                        new Vector2(triangle1.X, triangle1.Y));
 
                     _drawer.DrawLine(
-                        new Vector2((pos2.X + 1.0f) / 2.0f, (pos2.Y + 1.0f) / 2.0f),
-                        new Vector2((pos0.X + 1.0f) / 2.0f, (pos0.Y + 1.0f) / 2.0f));
+                        new Vector2(triangle1.X, triangle1.Y),
+                        new Vector2(triangle2.X, triangle2.Y));
+
+                    _drawer.DrawLine(
+                        new Vector2(triangle2.X, triangle2.Y),
+                        new Vector2(triangle0.X, triangle0.Y));
                 }
             }
         }
@@ -124,6 +133,10 @@ namespace Vulkaan
             _renderTarget.Clear(color);
         }
 
+        /// <summary>
+        /// Set a render target.
+        /// </summary>
+        /// <param name="target">The target to render to, null to draw to the back buffer.</param>
         public void SetRenderTarget(VRenderTarget target)
         {
             if (target == null)

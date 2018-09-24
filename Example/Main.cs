@@ -72,12 +72,18 @@ namespace Example
         {
             _device.Clear(new VColor(255, 255, 255, 255));
 
-            Matrix4 view = Matrix4.CreateLookAt(new Vector3(10, 10, -10), new Vector3(0, 0, 0), new Vector3(0, 1, 0));
-            Matrix4 proj = Matrix4.CreatePerspectiveFieldOfView(VMath.PI / 1.2f, 640.0f / 480.0f, 0.1f, 100.0f);
-            Matrix4 world = Matrix4.CreateFromYawPitchRoll(rotation, 0, 0);
-            rotation += 0.05f;
+            Matrix4 view = Matrix4.CreateLookAt(new Vector3(-2 + rotation, 3, -2 + rotation * 0.5f), new Vector3(0, 0, 0), new Vector3(0, 1, 0));
+            Matrix4 proj = Matrix4.CreatePerspectiveFieldOfView(VMath.PI / 2, 640.0f / 480.0f, 0.1f, 100.0f);
+            rotation += 0.01f;
 
-            _device.Draw(_buffer, Matrix4.Multiply(Matrix4.Multiply(world, view), proj));
+            for (int i = 0; i < 2; ++i)
+            {
+                for (int j = 0; j < 2; ++j)
+                {
+                    Matrix4 world = Matrix4.CreateTranslation(new Vector3(i * 2, 0, j * 2));
+                    _device.Draw(_buffer, Matrix4.Multiply(Matrix4.Multiply(world, view), proj));
+                }
+            }
 
             UpdatePictureBox();
         }

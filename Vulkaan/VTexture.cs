@@ -8,7 +8,7 @@ namespace Vulkaan
 {
     public class VTexture
     {
-        private byte[] _pixels;
+        protected byte[] _pixels;
 
         /// <summary>
         /// Pixel data of this texture.

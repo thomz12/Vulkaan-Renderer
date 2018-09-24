@@ -81,6 +81,34 @@ namespace Vulkaan.Math
         }
 
         /// <summary>
+        /// Clamp a value between two values.
+        /// </summary>
+        /// <param name="value">The value to clamp.</param>
+        /// <param name="min">The minimal return value.</param>
+        /// <param name="max">The maximum return value.</param>
+        /// <returns></returns>
+        public static float Clamp(float value, float min, float max)
+        {
+            return System.Math.Max(min, System.Math.Min(value, max));
+        }
+
+        /// <summary>
+        /// Interpolate a value.
+        /// </summary>
+        /// <param name="min">Minimal value.</param>
+        /// <param name="max">Maximum value.</param>
+        /// <param name="gradient">The gradient, is a percentage between min and max.
+        /// 0.0f is equal to min,
+        /// 1.0f is equal to max,
+        /// 0.5f is in the center of min and max.
+        /// </param>
+        /// <returns></returns>
+        public static float Interpolate(float min, float max, float gradient)
+        {
+            return min + (max - min) * Clamp(gradient, 0.0f, 1.0f);
+        }
+
+        /// <summary>
         /// Wraps a value around some significant range.
         /// Similar to modulo, but works in a unary direction over any range (including negative values).
         /// </summary>

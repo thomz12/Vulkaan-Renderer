@@ -20,11 +20,15 @@ namespace Vulkaan
         /// <param name="color">The color to clear to.</param>
         internal void Clear(VColor color)
         {
-            int length = Pixels.Length / 4;
+            int length = _pixels.Length;
 
-            // Clear all pixels.
-            for (uint i = 0; i < length; ++i)
-                this[i] = color;
+            for(uint i = 0; i < length; i += 4)
+            {
+                _pixels[i + 0] = color.red;
+                _pixels[i + 1] = color.green;
+                _pixels[i + 2] = color.blue;
+                _pixels[i + 3] = color.alpha;
+            }
         }
     }
 }
