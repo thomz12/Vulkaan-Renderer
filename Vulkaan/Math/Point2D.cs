@@ -14,11 +14,17 @@ namespace Vulkaan.Math
         /// <summary>
         /// X value.
         /// </summary>
-        public int x;
+        public int X;
 
         /// <summary>
         /// Y value.
         /// </summary>
-        public int y;
+        public int Y;
+
+        public Point2D(int x, int y)
+        {
+            this.X = x;
+            this.Y = y;
+        }
     }
 }

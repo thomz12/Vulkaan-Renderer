@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Vulkaan.Math;
+using Vulkaan.Shaders;
 
 namespace Vulkaan
 {
@@ -24,24 +21,40 @@ namespace Vulkaan
         /// </summary>
         private VRenderTarget _renderTarget;
 
+        /// <summary>
+        /// The class responsible for drawing.
+        /// </summary>
         private VDrawer _drawer;
+
+        /// <summary>
+        /// The current shader to use.
+        /// </summary>
+        private VShader _curShader;
+
+        /// <summary>
+        /// The rendering modes.
+        /// </summary>
+        public RenderModes RenderModes { get; set; }
 
         /// <summary>
         /// Vulkaan constructor.
         /// </summary>
-        public VulkaanDevice()
+        public VulkaanDevice(uint width, uint height)
         {
             // Create a default sized backbuffer.
-            _backBuffer = new VRenderTarget(640, 480);
-            _frontBuffer = new VRenderTarget(640, 480);
+            _backBuffer = new VRenderTarget(width, height);
+            _frontBuffer = new VRenderTarget(width, height);
 
-            // Set backbuffer as default render target.
-            _renderTarget = _backBuffer;
-
+            // Set default drawer.
             _drawer = new VDrawer();
 
-            // Set the default render target.
+            // Set backbuffer as default render target.
             SetRenderTarget(null);
+
+            // Set default shader.
+            _curShader = new DefaultShader();
+
+            RenderModes = RenderModes.SOLID;
         }
 
         /// <summary>
@@ -57,7 +70,7 @@ namespace Vulkaan
 
             // If the backbuffer was the render target, switch it too.
             if (_renderTarget == _frontBuffer)
-                SetRenderTarget(null);
+                SetRenderTarget(_backBuffer);
 
             // Return the pixels of the front buffer.
             return _frontBuffer.Pixels;
@@ -67,60 +80,54 @@ namespace Vulkaan
         /// Draw a given buffer.
         /// </summary>
         /// <param name="buffer">The buffer to draw.</param>
-        public void Draw(VVertexBuffer buffer, Matrix4 transformation)
+        public void Draw(VVertexBuffer buffer)
         {
+            // Draw non-indexed.
             if (buffer.Index == null)
             {
-                // Draw non-indexed.
+                // TODO: non-indexed rendering.
             }
+            // Draw indexed.
             else
             {
-                for (int i = 0; i < buffer.Index.Length; i += 3)
+                Parallel.For(0, buffer.Index.Length / 3, i =>
                 {
-                    // Draw indexed.
                     Vector4 pos0 = new Vector4(
-                        buffer.Data[buffer.Index[i + 0] * 3 + 0],
-                        buffer.Data[buffer.Index[i + 0] * 3 + 1],
-                        buffer.Data[buffer.Index[i + 0] * 3 + 2],
+                        buffer.Data[buffer.Index[i * 3 + 0] * 3 + 0],
+                        buffer.Data[buffer.Index[i * 3 + 0] * 3 + 1],
+                        buffer.Data[buffer.Index[i * 3 + 0] * 3 + 2],
                         1.0f);
 
                     Vector4 pos1 = new Vector4(
-                        buffer.Data[buffer.Index[i + 1] * 3 + 0],
-                        buffer.Data[buffer.Index[i + 1] * 3 + 1],
-                        buffer.Data[buffer.Index[i + 1] * 3 + 2],
+                        buffer.Data[buffer.Index[i * 3 + 1] * 3 + 0],
+                        buffer.Data[buffer.Index[i * 3 + 1] * 3 + 1],
+                        buffer.Data[buffer.Index[i * 3 + 1] * 3 + 2],
                         1.0f);
 
                     Vector4 pos2 = new Vector4(
-                        buffer.Data[buffer.Index[i + 2] * 3 + 0],
-                        buffer.Data[buffer.Index[i + 2] * 3 + 1],
-                        buffer.Data[buffer.Index[i + 2] * 3 + 2],
+                        buffer.Data[buffer.Index[i * 3 + 2] * 3 + 0],
+                        buffer.Data[buffer.Index[i * 3 + 2] * 3 + 1],
+                        buffer.Data[buffer.Index[i * 3 + 2] * 3 + 2],
                         1.0f);
 
-                    pos0 = pos0.Transform(transformation);
-                    pos1 = pos1.Transform(transformation);
-                    pos2 = pos2.Transform(transformation);
+                    // Calculate triangle positions.
+                    Vector3 triangle0 = _curShader.CalculateVertex(pos0);
+                    Vector3 triangle1 = _curShader.CalculateVertex(pos1);
+                    Vector3 triangle2 = _curShader.CalculateVertex(pos2);
 
-                    // Perspective division.
-                    pos0 /= -pos0.W;
-                    pos1 /= -pos1.W;
-                    pos2 /= -pos2.W;
-
-                    Vector3 triangle0 = new Vector3((pos0.X + 1.0f) / 2.0f, (pos0.Y + 1.0f) / 2.0f, pos0.Z);
-                    Vector3 triangle1 = new Vector3((pos1.X + 1.0f) / 2.0f, (pos1.Y + 1.0f) / 2.0f, pos1.Z);
-                    Vector3 triangle2 = new Vector3((pos2.X + 1.0f) / 2.0f, (pos2.Y + 1.0f) / 2.0f, pos2.Z);
-
-                    _drawer.DrawLine(
-                        new Vector2(triangle0.X, triangle0.Y),
-                        new Vector2(triangle1.X, triangle1.Y));
-
-                    _drawer.DrawLine(
-                        new Vector2(triangle1.X, triangle1.Y),
-                        new Vector2(triangle2.X, triangle2.Y));
-
-                    _drawer.DrawLine(
-                        new Vector2(triangle2.X, triangle2.Y),
-                        new Vector2(triangle0.X, triangle0.Y));
-                }
+                    // Draw the triangle.
+                    if (RenderModes.HasFlag(RenderModes.SOLID))
+                    {
+                        _drawer.DrawTriangle(triangle0, triangle1, triangle2);
+                    }
+                    // Draw the wireframe.
+                    if (RenderModes.HasFlag(RenderModes.WIREFRAME))
+                    {
+                        _drawer.DrawLine(triangle0, triangle1);
+                        _drawer.DrawLine(triangle1, triangle2);
+                        _drawer.DrawLine(triangle2, triangle0);
+                    }
+                });
             }
         }
 
@@ -131,6 +138,29 @@ namespace Vulkaan
         public void Clear(VColor color)
         {
             _renderTarget.Clear(color);
+        }
+
+        /// <summary>
+        /// Resize the front and back buffers.
+        /// </summary>
+        /// <param name="width">Width to resize to.</param>
+        /// <param name="height">Height to resize to.</param>
+        public void Resize(uint width, uint height)
+        {
+            _backBuffer = new VRenderTarget(width, height);
+            _frontBuffer = new VRenderTarget(width, height);
+
+            _renderTarget = _backBuffer;
+        }
+
+        /// <summary>
+        /// Set the shader to use for next draw.
+        /// </summary>
+        /// <param name="shader">The shader to use.</param>
+        public void SetShader(VShader shader)
+        {
+            _curShader = shader;
+            _drawer.SetShader(shader);
         }
 
         /// <summary>

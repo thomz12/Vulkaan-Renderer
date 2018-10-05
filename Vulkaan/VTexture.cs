@@ -9,6 +9,9 @@ namespace Vulkaan
     public class VTexture
     {
         protected byte[] _pixels;
+        
+        private uint _width;
+        private uint _height;
 
         /// <summary>
         /// Pixel data of this texture.
@@ -22,12 +25,12 @@ namespace Vulkaan
         /// <summary>
         /// Width of the texture in pixels.
         /// </summary>
-        public uint Width { get; private set; }
+        public uint Width { get => _width; private set => _width = value; }
 
         /// <summary>
         /// Height of the texture in pixels.
         /// </summary>
-        public uint Height { get; private set; }
+        public uint Height { get => _height; private set => _height = value; }
 
         /// <summary>
         /// Texture constructor.
@@ -102,10 +105,10 @@ namespace Vulkaan
         {
             get
             {
-                if (x < 0 || x >= Width || y < 0 || y >= Height)
+                if (x < 0 || x >= _width || y < 0 || y >= _height)
                     return new VColor(0, 0, 0, 0);
 
-                uint index = (x + y * Width) * 4;
+                uint index = (x + y * _width) * 4;
 
                 return new VColor
                 (
@@ -117,10 +120,10 @@ namespace Vulkaan
             }
             internal set
             {
-                if (x < 0 || x >= Width || y < 0 || y >= Height)
+                if (x < 0 || x >= _width || y < 0 || y >= _height)
                     return;
 
-                uint index = (x + y * Width) * 4;
+                uint index = (x + y * _width) * 4;
 
                 _pixels[index + 0] = value.red;
                 _pixels[index + 1] = value.green;

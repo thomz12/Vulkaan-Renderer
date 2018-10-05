@@ -34,9 +34,10 @@
             // 
             // pb_screen
             // 
+            this.pb_screen.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pb_screen.Location = new System.Drawing.Point(0, 0);
             this.pb_screen.Name = "pb_screen";
-            this.pb_screen.Size = new System.Drawing.Size(640, 480);
+            this.pb_screen.Size = new System.Drawing.Size(680, 440);
             this.pb_screen.TabIndex = 0;
             this.pb_screen.TabStop = false;
             // 
@@ -44,7 +45,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(640, 480);
+            this.ClientSize = new System.Drawing.Size(680, 440);
             this.Controls.Add(this.pb_screen);
             this.Name = "Main";
             this.Text = "Vulkaan Renderer";
