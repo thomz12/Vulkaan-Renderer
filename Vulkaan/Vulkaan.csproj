@@ -47,6 +47,7 @@
     <Compile Include="Shaders\DefaultShader.cs" />
     <Compile Include="Shaders\WaveShader.cs" />
     <Compile Include="VColor.cs" />
+    <Compile Include="VDepthBuffer.cs" />
     <Compile Include="VDrawer.cs" />
     <Compile Include="VRenderTarget.cs" />
     <Compile Include="Shaders\VShader.cs" />

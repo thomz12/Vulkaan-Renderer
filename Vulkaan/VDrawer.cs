@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vulkaan.Math;
-using Vulkaan.Shaders;
+﻿using Vulkaan.Math;
 
 namespace Vulkaan
 {
     internal class VDrawer
     {
         private VRenderTarget _target;
-
-        private VShader _shader;
 
         /// <summary>
         /// Color of the line to render.
@@ -34,15 +26,6 @@ namespace Vulkaan
         internal void SetDrawTarget(VRenderTarget target)
         {
             _target = target;
-        }
-
-        /// <summary>
-        /// Set a shader for the drawer to use.
-        /// </summary>
-        /// <param name="shader">The shader to use.</param>
-        internal void SetShader(VShader shader)
-        {
-            _shader = shader;
         }
 
         /// <summary>

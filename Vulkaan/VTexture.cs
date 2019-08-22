@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Vulkaan
 {
     public class VTexture
-    {
-        protected byte[] _pixels;
-        
+    {        
         private uint _width;
         private uint _height;
+        
+        protected byte[] _pixels;
 
         /// <summary>
         /// Pixel data of this texture.

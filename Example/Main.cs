@@ -20,7 +20,12 @@ namespace Example
         private VShader _shader;
         private Bitmap _bitmap;
 
+        private int _x;
+        private int _y;
+
         private float rotation = 0.0f;
+
+        private Vector3 _cameraRot;
 
         VVertexBuffer _buffer;
 
@@ -62,8 +67,8 @@ namespace Example
             uint xSize = 32;
             uint ySize = 32;
 
-            _device.RenderModes = RenderModes.SOLID;
-            _device.RenderModes |= RenderModes.WIREFRAME;
+             // _device.RenderModes = RenderModes.SOLID;
+            _device.RenderModes = RenderModes.WIREFRAME;
 
             float[] data = new float[(xSize + 1) * (ySize + 1) * 3];
             for (int i = 0, y = 0; y <= ySize; y++)
@@ -88,11 +93,24 @@ namespace Example
                 }
             }
 
+            VDepthBuffer depthBuffer = new VDepthBuffer(640, 480);
+
             _buffer = new VVertexBuffer(data, index);
             _shader = new WaveShader();
 
             pb_screen.Image = _bitmap;
             pb_screen.Resize += Pb_screen_Resize;
+            pb_screen.MouseMove += Pb_screen_MouseMove;
+        }
+
+        private void Pb_screen_MouseMove(object sender, MouseEventArgs e)
+        {
+            int deltaX = e.X - _x;
+            int deltaY = _y - e.Y;
+            _x = e.X;
+            _y = e.Y;
+
+            _cameraRot = new Vector3(_cameraRot.X + deltaY * 0.1f, _cameraRot.Y + deltaX * 0.1f, _cameraRot.Z);
         }
 
         private void Pb_screen_Resize(object sender, EventArgs e)
@@ -118,8 +136,10 @@ namespace Example
             _device.Clear(new VColor(0, 0, 0, 255));
 
             // Create view and projection matrices.
-            Matrix4 view = Matrix4.CreateLookAt(new Vector3(-2.5f, 4.0f, 2.5f), new Vector3(5, 8, 5), new Vector3(0, 1, 0));
+            Matrix4 view = Matrix4.CreateLookAt(new Vector3(-2f, 3f, -2f), new Vector3(5, 0, 5), new Vector3(0, 1, 0));
             Matrix4 proj = Matrix4.CreatePerspectiveFieldOfView(VMath.PI / 2, pb_screen.Width / (float)pb_screen.Height, 0.1f, 100.0f);
+
+            rotation += 0.01f;
 
             _device.SetShader(_shader);
 

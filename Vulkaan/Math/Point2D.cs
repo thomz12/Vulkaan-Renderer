@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Vulkaan.Math
+﻿namespace Vulkaan.Math
 {
     /// <summary>
     /// Structure representing a 2 Dimensional point in space.

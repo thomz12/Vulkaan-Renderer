@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vulkaan.Math;
+﻿using Vulkaan.Math;
 
 namespace Vulkaan.Shaders
 {
@@ -25,7 +20,7 @@ namespace Vulkaan.Shaders
             return new Vector3(
                 (pos.X + 1.0f) / 2.0f,
                 (pos.Y + 1.0f) / 2.0f,
-                pos.Z
+                (pos.Z + 1.0f) / 2.0f
             );
         }
 
