@@ -62,6 +62,18 @@ namespace Vulkaan.Math
                    Height == other.Height;
         }
 
+        /// <summary>Gets the hash code of this rectangle.</summary>
+        /// <returns>Hash code of this vector.</returns>
+        public override int GetHashCode()
+        {
+            var hashCode = 466501756;
+            hashCode = hashCode * -1521134295 + X.GetHashCode();
+            hashCode = hashCode * -1521134295 + Y.GetHashCode();
+            hashCode = hashCode * -1521134295 + Width.GetHashCode();
+            hashCode = hashCode * -1521134295 + Height.GetHashCode();
+            return hashCode;
+        }
+
         /// <summary>
         /// Check if two rectangles are the same.
         /// </summary>

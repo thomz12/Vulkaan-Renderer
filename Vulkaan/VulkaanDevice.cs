@@ -160,7 +160,6 @@ namespace Vulkaan
         public void SetShader(VShader shader)
         {
             _curShader = shader;
-            _drawer.SetShader(shader);
         }
 
         /// <summary>
